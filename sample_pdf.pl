@@ -241,11 +241,8 @@
                         }; # end of data
             
             # PDF creation
-                        
-                          
-                        &KG::create($page,
-                                            $header,
-                                            $data);
+                                                  
+                        &KG::create($page,$header,$data);
             
             # Content
             
