@@ -179,7 +179,7 @@
                                                         
                                                          [1,'Printing of visiting cards','0.50','1000.00','500.00'],
                                                          [2,'Printing of promotion material','4','1000.00','4000.00'],                                                         
-                                                         [3,'Printing of promotion material Printing of promotion material Printing of promotion material Printing of promotion material Printing of promotion materialPrinting of promotion material Printing of promotion material Printing of promotion material Printing of promotion material Printing of promotion material Printing of promotion material Printing of promotion material','4','1000.00','4000.00'],
+                                                         [3,'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ac dui nec enim mattis vulputate. Nam nunc metus, fermentum nec risus a, accumsan volutpat lacus. Aliquam id consequat odio. Integer sit amet felis vehicula, placerat enim at, elementum nisi. Ut tincidunt justo tincidunt bibendum tincidunt. In dignissim turpis in metus efficitur mollis.','6','3000.00','18000.00'],
                                                          
                                                         ],
                                         
