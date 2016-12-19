@@ -10,3 +10,9 @@ Kangiten will produce business cycle PDF documents
 9. BAS.pdf is a background pdf file. Content will be constructed over that.
 10.Construct the perl HoH structure suits to your need
 
+## Copyright and license
+
+Copyright: info@webstarscg.com, 2016 and later.
+
+All source files in this package, including the documentation, are open source software under the terms of [Perl's Artistic License 2.0](http://www.perlfoundation.org/artistic_license_2_0).
+
