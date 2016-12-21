@@ -5,7 +5,7 @@ Kangiten will produce PDF documents based on PDF::Reuse module. It suitable for 
 - Make sure the module availability of PDF::Reuse in the system.
 - Check sample_pdf.pl for example usage ( Run it by Web server or command prompt )
 - A new pdf file will be created based on given default data with BAS.pdf as background
-- Construct the perl HoH structure to suits need
+- Construct the perl HoH structure suits to your need
 - Change the background PDF file to your need
 
 ## File
