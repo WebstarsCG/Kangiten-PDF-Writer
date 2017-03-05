@@ -3,7 +3,7 @@
     
     # Kangiten
     
-    package KG;                                                     ;
+        package KG;                                                     ;
     
     # System Module
     
@@ -86,9 +86,15 @@
                 
             $c_v{y}=$c_v{height}-$c_v{page}->{margin}->{top};
             
+            $c_v{page_data_counter} = 0;
+            
+            $c_v{page_data_rows}    = scalar(keys %{$c_v{data}});
+            
             for(0..scalar(keys %{$c_v{data}})-1){
                     
                 $c_v{st_var}=$_;
+                
+                $c_v{page_data_counter}++;
                 
                 $c_v{'current_row'} = $c_v{data}->{$c_v{st_var}};
                     
@@ -129,13 +135,19 @@
                 
                 
                 
-        #get the inner arrays    
+        
+                #get the inner arrays
+                 $c_v{row_counter}=0; 
             
                 for(0..$c_v{len}){
                   
         # get the starting point of xaxis of data information
                 
                     $c_v{ar_ref}=$c_v{data}->{$c_v{st_var}}->{data}->[$_];              # get the inner array reference at data_info
+                    
+                    $c_v{row_counter}++; # row counter
+                    
+                    $c_v{data_rows} = scalar(@{$c_v{data}->{$c_v{st_var}}->{data}});
                 
                     my @data_in;
                     
@@ -162,6 +174,8 @@
                     
                     $c_v{y_data}-=5;
                     
+                   
+                    
                     $c_v{x} = $c_v{x}+($c_v{data}->{$c_v{st_var}}->{'data_left_margin'} || 0);
                                                                                 
                     
@@ -181,6 +195,8 @@
         # get the inner array datas
             
                     for(@data_in){
+                        
+                        
                     
                         # Get the text which to be present in innner array of data_info
         
@@ -190,7 +206,9 @@
                         
                         $c_v{data_value}=$c_v{data}->{$c_v{st_var}}->{header}->{$c_v{initial}};                        
                         
-                        $c_v{store_2}=&text_wrap($c_v{x},$_,$c_v{store_2},$c_v{y_data},$c_v{data_value},$c_v{page});                        
+                        $c_v{store_2}=&text_wrap($c_v{x},$_,$c_v{store_2},$c_v{y_data},$c_v{data_value},$c_v{page});
+                        
+                       # $c_v{store_2}=&text_wrap($c_v{x},"RC:".$c_v{row_counter}.'-DR'.$c_v{data_rows},$c_v{store_2},$c_v{y_data},$c_v{data_value},$c_v{page});                        
                                                 
                         $c_v{x}+=$c_v{data}->{$c_v{st_var}}->{header}->{$c_v{initial}}->{d_width};                        
                         
@@ -232,25 +250,42 @@
                     
         # check if data would cross the bottom
                 
-                    if (($c_v{y_data}) < $c_v{page}->{margin}->{bottom}){          
+                    if (($c_v{y_data}) < $c_v{page}->{margin}->{bottom}){
+                        
+                            # if data exists
+                        
+                            if (  ($c_v{page_data_counter} <  $c_v{page_data_rows}) ||
+                                  ($c_v{row_counter} != $c_v{data_rows})
+                            ){
+                                            
+                                    prPage(); # create new page
+                                                  
+                                    $c_v{page}->{form}->{'file'} = ($c_v{page}->{form}->{'inner'})?$c_v{page}->{form}->{'inner'}:$c_v{page}->{form}->{file};              
+                                                  
+                                    prForm($c_v{page}->{form}->{file},$c_v{page}->{form}->{page});
+                                                     
+                            # set the start line(Yaxis) of next page
                 
-                        prPage();                                           # create new page
-                                      
-                        $c_v{page}->{form}->{'file'} = ($c_v{page}->{form}->{'inner'})?$c_v{page}->{form}->{'inner'}:$c_v{page}->{form}->{file};              
-                                      
-                        prForm($c_v{page}->{form}->{file},$c_v{page}->{form}->{page});
-                                         
-        # set the start line(Yaxis) of next page
-    
-                        $c_v{y_data}=$c_v{height}-($c_v{page}->{margin}->{top});
+                                    $c_v{y_data}=$c_v{height}-($c_v{page}->{margin}->{top});
+                                    
+                                    # Header function added for data case
+                                    
+                                    $c_v{y_data}=&header_text($c_v{head},$c_v{page}) if($c_v{page}->{'is_header_all'});
+                            
+                            } # data exisits        
+                                
+                                # build row header, if data exisits
+                                
+                                if($c_v{row_counter} < $c_v{data_rows} ){
+                                
+                                    
+                                    $c_v{y_data}=&header($c_v{page},$c_v{data}->{$c_v{st_var}},$c_v{y_data});
+                                    $c_v{y_data} = $c_v{y_data}-15;
+                                    
+                                
+                                } # check header write
                         
-                        # Header function added for data case
-                        
-                        $c_v{y_data}=&header_text($c_v{head},$c_v{page}) if($c_v{page}->{'is_header_all'});
-                        
-                        $c_v{y_data}=&header($c_v{page},$c_v{data}->{$c_v{st_var}},$c_v{y_data});
-                        
-                        $c_v{y_data} = $c_v{y_data}-15;
+                       
                         
                     } # end of if loop
                     
@@ -468,9 +503,13 @@
             
             $tm_v{page}=$_[5];
                        
-            $tm_v{align}=$_[6]||$tm_v{data_value}->{align};
+            $tm_v{align}=$_[6] || $tm_v{data_value}->{align};
             
-            $tm_v{offset}=$tm_v{data_value}->{offset}||100;
+            $tm_v{offset} = $tm_v{data_value}->{offset}||100;
+            
+            $tm_v{font} = $tm_v{data_value}->{font};
+            
+            $tm_v{line_height} = $tm_v{data_value}->{line_height} || 11;
             
             $tm_v{space}=0;
             
@@ -481,10 +520,14 @@
             $tm_v{y_axis}=$tm_v{y_data};
     
             for(0..$tm_v{length}){
+                
+                prFont($tm_v{data_value}->{font}) if($tm_v{data_value}->{font});
+                
+                prFontSize($tm_v{data_value}->{font_size}) if($tm_v{data_value}->{font_size});
         
                 prText($tm_v{x},$tm_v{y_axis},$tm_v{res}->[$_],$tm_v{align});
                       
-                $tm_v{y_axis}=$tm_v{y_axis}-11;
+                $tm_v{y_axis}=$tm_v{y_axis}-$tm_v{line_height};
                 
             }
             
@@ -552,13 +595,24 @@
                 
                         prFontSize($ht_v{data}->{$ht_v{st_var}}->{header}->{$ht_v{initial}}->{font_size}||$ht_v{page}->{font_size});
                                        
-                        prText($ht_v{x},$ht_v{y},$_);
+                       # prText($ht_v{x},$ht_v{y},$_);
+                        
+                        $ht_v{store_2}=&text_wrap($ht_v{x},$_,$ht_v{store_2},$ht_v{y},
+                                                  $ht_v{data}->{$ht_v{st_var}}->{header}->{$ht_v{initial}},
+                                                  $ht_v{page});
                         
                         $ht_v{x}+=$ht_v{data}->{$ht_v{st_var}}->{header}->{$ht_v{initial}}->{d_width};      # width size of text of data
                     
                         ++$ht_v{initial};
                         
                     }   # end of for(@data_in)
+                    
+                    # text wrap
+                    if($ht_v{store_2} eq 0){
+                        
+                        $ht_v{store_2}=$ht_v{y}-(($ht_v{data}->{$ht_v{st_var}}->{line_height})?$ht_v{data}->{$ht_v{st_var}}->{line_height}:20);                    
+                    }
+                    
                     #
                     $ht_v{y}-=$ht_v{data}->{$ht_v{st_var}}->{line_height}||$ht_v{page}->{line_height};     # get the next line(Yaxis) of data
                     
