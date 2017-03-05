@@ -13,7 +13,7 @@ Kangiten will produce PDF documents based on PDF::Reuse module. It suitable for 
 - KG has wrapper functions for PDF::Reuse module core utilities
 - text_wrap is an internal module for KG
 
-## To Do
+## To do
 - Naming improvements in input hash structure
 - Documentation for input hash structure
 - Step by Step Samples
