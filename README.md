@@ -15,6 +15,7 @@ Kangiten will produce PDF documents based on PDF::Reuse module. It suitable for 
 
 ## To Do
 - Naming improvements in input hash structure
+- Documentation for input hash structure
 - Step by Step Samples
 - Ready to use structures for generic needs
 
